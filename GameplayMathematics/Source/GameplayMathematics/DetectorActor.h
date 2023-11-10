@@ -5,9 +5,6 @@
 #include "GameFramework/Actor.h"
 #include "DetectorActor.generated.h"
 
-// TODO: Add initialisation of actor components
-// TODO: Add detection method (to tick) -- set the color of the spotlight component based on the dot product
-
 // TODO: Interpolate the detector colour
 
 // TODO: Add method to temporarily disable the detector
@@ -23,8 +20,6 @@ public:
 	ADetectorActor();
 
 protected: 
-	virtual void BeginPlay() override;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* Mesh;
 
@@ -37,7 +32,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
     FColor DetectedColor;
 
-public: 
+	UPROPERTY()
+	APawn* Player;
+
+	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
+	virtual void DetectPlayer();
 
 };
