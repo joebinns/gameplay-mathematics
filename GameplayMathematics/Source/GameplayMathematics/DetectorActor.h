@@ -35,13 +35,13 @@ protected:
 	USpotLightComponent* SpotLight;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FColor NeutralColor;
+	FLinearColor NeutralColor;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FColor WarningColor;
+	FLinearColor WarningColor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FColor SpottedColor;
+	FLinearColor SpottedColor;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpottedTriggerTime;

@@ -23,9 +23,6 @@ void ADetectorActor::BeginPlay()
 
 	// Initialise the player reference
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-	
-	// Initialise spot light's colour
-	SpotLight->SetLightFColor(NeutralColor);
 }
 
 void ADetectorActor::Tick(float DeltaTime)
@@ -38,11 +35,10 @@ void ADetectorActor::Tick(float DeltaTime)
 
 void ADetectorActor::DetectPlayer(float DeltaTime)
 {
+	// Update the time in cone based on if the player is in the spotlight
 	const FVector DisplacementToPlayer = Player->GetActorLocation() - GetActorLocation();
 	const float FacingPlayerDot = FVector::DotProduct(DisplacementToPlayer.GetSafeNormal(), GetActorForwardVector());
-
 	const bool IsPlayerInVisionCone = FacingPlayerDot >= SpotLight->GetCosHalfConeAngle() && DisplacementToPlayer.Length() <= SpotLight->AttenuationRadius;
-	
 	if (IsPlayerInVisionCone)
 	{
 		TimeInCone += DeltaTime;
@@ -51,20 +47,10 @@ void ADetectorActor::DetectPlayer(float DeltaTime)
 	{
 		TimeInCone -= DeltaTime;
 	}
-
 	TimeInCone = FMath::Clamp(TimeInCone, 0.f, SpottedTriggerTime);
-	
-	if (TimeInCone == 0.f)
-	{
-		SpotLight->SetLightFColor(NeutralColor);
-	}
-	else if (0.f < TimeInCone && TimeInCone < SpottedTriggerTime)
-	{
-		SpotLight->SetLightFColor(WarningColor);
-	}
-	else if (SpottedTriggerTime <= TimeInCone)
-	{
-		SpotLight->SetLightFColor(SpottedColor);
-	}
 
+	// Update the color of the spot light, based 
+	const float T = TimeInCone / SpottedTriggerTime;
+	const FLinearColor Color = TimeInCone == 0.f ? NeutralColor : FLinearColor::LerpUsingHSV(WarningColor, SpottedColor, T);
+	SpotLight->SetLightColor(Color);
 }
