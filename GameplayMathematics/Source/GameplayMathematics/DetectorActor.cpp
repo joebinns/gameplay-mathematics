@@ -33,10 +33,10 @@ void ADetectorActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	// Detect player
-	DetectPlayer();
+	DetectPlayer(DeltaTime);
 }
 
-void ADetectorActor::DetectPlayer()
+void ADetectorActor::DetectPlayer(float DeltaTime)
 {
 	const FVector DisplacementToPlayer = Player->GetActorLocation() - GetActorLocation();
 	const float FacingPlayerDot = FVector::DotProduct(DisplacementToPlayer.GetSafeNormal(), GetActorForwardVector());
@@ -45,12 +45,26 @@ void ADetectorActor::DetectPlayer()
 	
 	if (IsPlayerInVisionCone)
 	{
-		SpotLight->SetLightFColor(DetectedColor);
+		TimeInCone += DeltaTime;
 	}
 	else
 	{
+		TimeInCone -= DeltaTime;
+	}
+
+	TimeInCone = FMath::Clamp(TimeInCone, 0.f, SpottedTriggerTime);
+	
+	if (TimeInCone == 0.f)
+	{
 		SpotLight->SetLightFColor(NeutralColor);
 	}
+	else if (0.f < TimeInCone && TimeInCone < SpottedTriggerTime)
+	{
+		SpotLight->SetLightFColor(WarningColor);
+	}
+	else if (SpottedTriggerTime <= TimeInCone)
+	{
+		SpotLight->SetLightFColor(SpottedColor);
+	}
+
 }
-
-
