@@ -3,6 +3,7 @@
 #include "DetectorActor.h"
 
 #include "Components/SpotLightComponent.h"
+#include "GameplayMathematicsProjectile.h"
 
 ADetectorActor::ADetectorActor()
 {
@@ -30,21 +31,43 @@ void ADetectorActor::BeginPlay()
 
 void ADetectorActor::OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Obstacle Encountered"));
-	
-	// TODO: Try to cast other actor to the projectile actor
-	// TODO: If it succeeds, then disable then temporarily disable the detector actor
+	const AGameplayMathematicsProjectile* GameplayMathematicsProjectile = Cast<AGameplayMathematicsProjectile>(OtherActor);
+	if (GameplayMathematicsProjectile != nullptr)
+	{
+		Shutdown();
+	}
+}
+
+void ADetectorActor::Shutdown()
+{
+	// Disable the detector until the shutdown timer has passed
+	ShutdownTimer = ShutdownDuration;
+	TimeInCone = 0.f;
+	SpotLight->SetVisibility(false);
 }
 
 void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	// Detect player
-	DetectPlayer(DeltaTime);
+	if (ShutdownTimer > 0.f)
+	{
+		UpdateShutdownTimer(DeltaTime);
+	}
+	else
+	{
+		SpotLight->SetVisibility(true);
+		UpdateDetectionTimer(DeltaTime);
+		UpdateColor();
+	}
 }
 
-void ADetectorActor::DetectPlayer(float DeltaTime)
+void ADetectorActor::UpdateShutdownTimer(float DeltaTime)
+{
+	ShutdownTimer -= DeltaTime;
+}
+
+void ADetectorActor::UpdateDetectionTimer(float DeltaTime)
 {
 	// Update the time in cone based on if the player is in the spotlight
 	const FVector DisplacementToPlayer = Player->GetActorLocation() - GetActorLocation();
@@ -59,7 +82,10 @@ void ADetectorActor::DetectPlayer(float DeltaTime)
 		TimeInCone -= DeltaTime;
 	}
 	TimeInCone = FMath::Clamp(TimeInCone, 0.f, SpottedTriggerTime);
+}
 
+void ADetectorActor::UpdateColor()
+{
 	// Update the color of the spot light based on the time in cone
 	// Lerp between the warning color and the spotted color
 	const float T = TimeInCone / SpottedTriggerTime;

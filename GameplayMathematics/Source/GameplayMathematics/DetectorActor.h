@@ -36,19 +36,33 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float SpottedTriggerTime;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ShutdownDuration;
+
 	virtual void BeginPlay() override;
+	
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION()
 	void OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION()
-	void DetectPlayer(float DeltaTime);
+	void Shutdown();
+
+	UFUNCTION()
+	void UpdateShutdownTimer(float DeltaTime);
+
+	UFUNCTION()
+	void UpdateDetectionTimer(float DeltaTime);
+	
+	UFUNCTION()
+	void UpdateColor();
 
 private:
 	UPROPERTY()
 	APawn* Player;
 	
 	float TimeInCone = 0.f;
+	float ShutdownTimer = 0.f;
 
 };
