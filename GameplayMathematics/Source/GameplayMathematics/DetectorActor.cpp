@@ -23,6 +23,17 @@ void ADetectorActor::BeginPlay()
 
 	// Initialise the player reference
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	// Bind to on actor hit
+	OnActorHit.AddDynamic(this, &ADetectorActor::OnDetectorActorHit);
+}
+
+void ADetectorActor::OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Obstacle Encountered"));
+	
+	// TODO: Try to cast other actor to the projectile actor
+	// TODO: If it succeeds, then disable then temporarily disable the detector actor
 }
 
 void ADetectorActor::Tick(float DeltaTime)

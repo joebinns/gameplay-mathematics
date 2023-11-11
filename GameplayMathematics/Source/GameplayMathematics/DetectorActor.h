@@ -38,7 +38,12 @@ protected:
 
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
-	virtual void DetectPlayer(float DeltaTime);
+
+	UFUNCTION()
+	void OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
+
+	UFUNCTION()
+	void DetectPlayer(float DeltaTime);
 
 private:
 	UPROPERTY()
