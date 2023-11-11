@@ -11,14 +11,6 @@
 
 class USpotLightComponent;
 
-UENUM(BlueprintType)
-enum class EDetectionState : uint8
-{
-	DE_Neutral UMETA(DisplayName="Neutral"),
-	DE_Warning UMETA(DisplayName="Warning"),
-	DE_Spotted UMETA(DisplayName="Spotted")
-};
-
 UCLASS()
 class GAMEPLAYMATHEMATICS_API ADetectorActor : public AActor
 {
@@ -54,7 +46,6 @@ private:
 	UPROPERTY()
 	APawn* Player;
 	
-	EDetectionState DetectionState = EDetectionState::DE_Neutral;
 	float TimeInCone = 0.f;
 
 };
