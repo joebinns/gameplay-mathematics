@@ -49,7 +49,8 @@ void ADetectorActor::DetectPlayer(float DeltaTime)
 	}
 	TimeInCone = FMath::Clamp(TimeInCone, 0.f, SpottedTriggerTime);
 
-	// Update the color of the spot light, based 
+	// Update the color of the spot light based on the time in cone
+	// Lerp between the warning color and the spotted color
 	const float T = TimeInCone / SpottedTriggerTime;
 	const FLinearColor Color = TimeInCone == 0.f ? NeutralColor : FLinearColor::LerpUsingHSV(WarningColor, SpottedColor, T);
 	SpotLight->SetLightColor(Color);
