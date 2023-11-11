@@ -5,8 +5,6 @@
 #include "GameFramework/Actor.h"
 #include "DetectorActor.generated.h"
 
-// TODO: Interpolate the detector colour
-
 // TODO: Add method to temporarily disable the detector
 
 class USpotLightComponent;
