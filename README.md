@@ -4,7 +4,7 @@ An assignment made for Futuregames course "3D Mathematics".
 ## Controls
 ### Movement
 Use <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd> and <kbd>D</kbd> to move.<br>
-Use <kbd>Space</kbd> to jump.<br>
+Use <kbd>Space</kbd> to jump.
 
 ### Shooting
 Walk into the gun trigger to pick up the gun.<br>
