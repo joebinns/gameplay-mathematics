@@ -97,10 +97,8 @@ void ADetectorActor::Tick(float DeltaTime)
   }
   ...
 }
-
-void ADetectorActor::UpdateShutdownTimer(float DeltaTime)
-{
-  ShutdownTimer -= DeltaTime;
-}
 ```
 
+### [Noise](https://github.com/joebinns/gameplay-mathematics/releases/tag/noise)
+Voronoi noise was used to create an electric effect to show when the detector is disabled.
+A dynamic material instance was then used to vary the effect based on when the detector is shutdown.
