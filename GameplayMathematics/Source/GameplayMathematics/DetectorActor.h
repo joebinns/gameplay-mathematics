@@ -5,8 +5,6 @@
 #include "GameFramework/Actor.h"
 #include "DetectorActor.generated.h"
 
-// TODO: Add method to temporarily disable the detector
-
 class USpotLightComponent;
 
 UCLASS()
@@ -39,10 +37,13 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ShutdownDuration;
 
+	UPROPERTY(BlueprintReadOnly)
+	float ShutdownTimer = 0.f;
+
 	virtual void BeginPlay() override;
 	
 	virtual void Tick(float DeltaTime) override;
-
+	
 	UFUNCTION()
 	void OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
@@ -63,6 +64,5 @@ private:
 	APawn* Player;
 	
 	float TimeInCone = 0.f;
-	float ShutdownTimer = 0.f;
 
 };
