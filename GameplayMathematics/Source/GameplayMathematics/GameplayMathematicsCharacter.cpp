@@ -108,3 +108,20 @@ bool AGameplayMathematicsCharacter::GetHasRifle()
 {
 	return bHasRifle;
 }
+
+bool AGameplayMathematicsCharacter::IsLookingAtEnemy()
+{
+	auto Camera = GetFirstPersonCameraComponent();
+	
+    FHitResult Hit;
+	
+    auto TraceStart = Camera->GetComponentLocation();
+    auto TraceEnd = TraceStart + Camera->GetForwardVector() * 1000.0f;
+	
+	FCollisionQueryParams QueryParams;
+	QueryParams.AddIgnoredActor(this);
+	
+	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, LookingAtTraceChannel, QueryParams);
+
+	return Hit.bBlockingHit && IsValid(Hit.GetActor());
+}

@@ -39,6 +39,8 @@ class AGameplayMathematicsCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
 
+	UPROPERTY(EditAnywhere, Category="Collision")
+	TEnumAsByte<ECollisionChannel> LookingAtTraceChannel = ECC_WorldStatic;
 	
 public:
 	AGameplayMathematicsCharacter();
@@ -63,6 +65,9 @@ public:
 	/** Getter for the bool */
 	UFUNCTION(BlueprintCallable, Category = Weapon)
 	bool GetHasRifle();
+
+	UFUNCTION(BlueprintCallable)
+	bool IsLookingAtEnemy();
 
 protected:
 	/** Called for movement input */
