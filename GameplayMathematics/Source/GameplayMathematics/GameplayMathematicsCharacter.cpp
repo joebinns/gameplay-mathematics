@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GameplayMathematicsCharacter.h"
+
+#include "DetectorActor.h"
 #include "GameplayMathematicsProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
@@ -116,12 +118,16 @@ bool AGameplayMathematicsCharacter::IsLookingAtEnemy()
     FHitResult Hit;
 	
     auto TraceStart = Camera->GetComponentLocation();
-    auto TraceEnd = TraceStart + Camera->GetForwardVector() * 1000.0f;
+    auto TraceEnd = TraceStart + Camera->GetForwardVector() * LookingAtTraceRange;
 	
 	FCollisionQueryParams QueryParams;
 	QueryParams.AddIgnoredActor(this);
 	
 	GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, LookingAtTraceChannel, QueryParams);
 
-	return Hit.bBlockingHit && IsValid(Hit.GetActor());
+	if (!Hit.bBlockingHit) return false;
+	auto ActorHit = Hit.GetActor();
+	if (!IsValid(ActorHit)) return false;
+	if (Cast<ADetectorActor>(ActorHit) == nullptr) return false;
+	return true;
 }

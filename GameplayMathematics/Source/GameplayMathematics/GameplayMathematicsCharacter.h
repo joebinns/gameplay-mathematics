@@ -39,8 +39,11 @@ class AGameplayMathematicsCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
 	class UInputAction* MoveAction;
 
-	UPROPERTY(EditAnywhere, Category="Collision")
+	UPROPERTY(EditAnywhere)
 	TEnumAsByte<ECollisionChannel> LookingAtTraceChannel = ECC_WorldStatic;
+	
+	UPROPERTY(EditAnywhere)
+	float LookingAtTraceRange = 10000.0f;
 	
 public:
 	AGameplayMathematicsCharacter();
