@@ -31,6 +31,34 @@ const float T = TimeInCone / SpottedTriggerTime;
 const FLinearColor Color = TimeInCone == 0.f ? NeutralColor : FLinearColor::LerpUsingHSV(WarningColor, SpottedColor, T);
 ```
 
+### [Intersection](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection-v2)
+A crosshair was added to help guide the player's aim.
+A line trace was then used to determine if the player was looking at the detector actor.
+The crosshair image was then dynamically switched between based on if the player was aiming at the detector actor.
+
+``` cpp
+bool AGameplayMathematicsCharacter::IsLookingAtEnemy()
+{
+	auto Camera = GetFirstPersonCameraComponent();
+
+  FHitResult Hit;
+
+  auto TraceStart = Camera->GetComponentLocation();
+  auto TraceEnd = TraceStart + Camera->GetForwardVector() * LookingAtTraceRange;
+	
+  FCollisionQueryParams QueryParams;
+  QueryParams.AddIgnoredActor(this);
+	
+  GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, LookingAtTraceChannel, QueryParams);
+
+	if (!Hit.bBlockingHit) return false;
+	auto ActorHit = Hit.GetActor();
+	if (!IsValid(ActorHit)) return false;
+	if (Cast<ADetectorActor>(ActorHit) == nullptr) return false;
+	return true;
+}
+```
+
 ### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection)
 Hit events on the detector actor with projectiles were used to disable the detector's spot light and to set a shutdown timer on the detector.
 Until the shutdown timer has passed, the detector is disabled.
