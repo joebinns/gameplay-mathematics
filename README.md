@@ -31,7 +31,7 @@ const float T = TimeInCone / SpottedTriggerTime;
 const FLinearColor Color = TimeInCone == 0.f ? NeutralColor : FLinearColor::LerpUsingHSV(WarningColor, SpottedColor, T);
 ```
 
-### [Intersection](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection)
+### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection)
 Hit events on the detector actor with projectiles were used to disable the detector's spot light and to set a shutdown timer on the detector.
 Until the shutdown timer has passed, the detector is disabled.
 
