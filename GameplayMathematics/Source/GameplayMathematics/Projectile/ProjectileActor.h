@@ -14,22 +14,21 @@ class AProjectileActor : public AActor
 {
 	GENERATED_BODY()
 
-	/** Sphere collision component */
-	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
-	USphereComponent* Sphere;
-
-	/** Projectile movement component */
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
-	UProjectileMovementComponent* ProjectileMovement;
-
 public:
 	AProjectileActor();
 
 	static TArray<AProjectileActor*> Projectiles;
-
-	/** Returns ProjectileMovement subobject **/
+	
+	USphereComponent* GetSphere() const { return Sphere; }
 	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 
+private:
+	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
+	USphereComponent* Sphere;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
+	UProjectileMovementComponent* ProjectileMovement;
+	
 protected:
 	virtual void BeginPlay();
 	virtual void Destroyed();
