@@ -14,7 +14,7 @@ Whilst holding the gun, use <kbd>LMB</kbd> to shoot.
 ### [Context](https://github.com/joebinns/gameplay-mathematics/releases/tag/context)
 Calculated the displacement of the player from a detector.
 The displacement's magnitude was used to determine if the player was in range of the detector.
-The dot product of the displacement and the detecetor's forward vector was used to check if the player was in the detector's cone of vision.
+The dot product of the displacement and the detector's forward vector were used to check if the player was in the detector's cone of vision.
 
 ``` cpp
 const FVector DisplacementToPlayer = Player->GetActorLocation() - GetActorLocation();
