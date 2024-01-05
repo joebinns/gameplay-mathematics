@@ -18,19 +18,23 @@ public:
 	AProjectileActor();
 
 	static TArray<AProjectileActor*> Projectiles;
-	
-	USphereComponent* GetSphere() const { return Sphere; }
-	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
 
+	UFUNCTION()
+	FSphere GetSphere() const { return Sphere; }
+	
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
-	USphereComponent* Sphere;
+	UStaticMeshComponent* Mesh;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Movement, meta = (AllowPrivateAccess = "true"))
 	UProjectileMovementComponent* ProjectileMovement;
+
+	UPROPERTY();
+	FSphere Sphere;
 	
 protected:
 	virtual void BeginPlay();
+	virtual void Tick();
 	virtual void Destroyed();
 };
 
