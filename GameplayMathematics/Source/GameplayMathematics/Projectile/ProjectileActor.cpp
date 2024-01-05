@@ -53,3 +53,8 @@ void AProjectileActor::Destroyed()
 	Super::Destroyed();
 	Projectiles.Remove(this);
 }
+
+void AProjectileActor::ClearProjectiles()
+{
+	Projectiles.Empty();
+}

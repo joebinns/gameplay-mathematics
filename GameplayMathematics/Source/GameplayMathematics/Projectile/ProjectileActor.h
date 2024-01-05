@@ -22,6 +22,9 @@ public:
 	UFUNCTION()
 	FSphere GetSphere() const { return Sphere; }
 	
+	UFUNCTION(BlueprintCallable)
+	static void ClearProjectiles();
+	
 private:
 	UPROPERTY(VisibleDefaultsOnly, Category=Projectile)
 	UStaticMeshComponent* Mesh;
