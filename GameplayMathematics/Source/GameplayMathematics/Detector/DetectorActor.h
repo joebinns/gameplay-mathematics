@@ -48,10 +48,10 @@ protected:
 	bool IsCollidingWithAnyProjectile();
 	
 	UFUNCTION()
-	bool IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox3d AABB);
+	bool IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB);
 
 	UFUNCTION()
-	FVector GetClosestPointInAABB(const FVector Point, const FBox3d AABB);
+	FVector GetClosestPointInAABB(const FVector Point, const FBox AABB);
 
 	UFUNCTION()
 	bool IsPointInSphere(const FVector Point, const FSphere Sphere);
@@ -72,7 +72,7 @@ private:
 	UPROPERTY()
 	APawn* Player;
 	
-	FBox3d CollisionAABB;
+	FBox CollisionAABB;
 	
 	float TimeInCone = 0.f;
 

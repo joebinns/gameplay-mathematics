@@ -28,6 +28,14 @@ void ADetectorActor::BeginPlay()
 
 	// Initialise the player reference
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
+
+	// Initialise collision AABB
+	const auto Center = Mesh->GetComponentLocation();
+	const FVector Extent = Mesh->Bounds.BoxExtent;
+	CollisionAABB = FBox::BuildAABB(Center, Extent);
+
+	// Debug
+	DrawDebugBox(GetWorld(), Center, Extent, FColor::Green);
 }
 
 void ADetectorActor::Shutdown()
@@ -62,25 +70,28 @@ void ADetectorActor::Tick(float DeltaTime)
 
 bool ADetectorActor::IsCollidingWithAnyProjectile()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Num Projectiles: %d"), AProjectileActor::Projectiles.Num());
+	//UE_LOG(LogTemp, Warning, TEXT("Num Projectiles: %d"), AProjectileActor::Projectiles.Num());
 	
 	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
 		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
 		{
+			//UE_LOG(LogTemp, Warning, TEXT("Projectile: %d"), AProjectileActor::Projectiles.Num());
+			//UE_LOG(LogTemp, Warning, TEXT("AABB: %"), CollisionAABB.Min.X);
+			
 			return true;
 		}
 	}
 	return false;
 }
 
-bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox3d AABB)
+bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB)
 {
 	const auto ClosestPointInAABB = GetClosestPointInAABB(Sphere.Center, AABB);
 	return IsPointInSphere(ClosestPointInAABB, Sphere);
 }
 
-FVector ADetectorActor::GetClosestPointInAABB(const FVector Point, const FBox3d AABB)
+FVector ADetectorActor::GetClosestPointInAABB(const FVector Point, const FBox AABB)
 {
 	FVector ClosestPointInAABB;
 	ClosestPointInAABB.X = FMath::Max(AABB.Min.X, FMath::Min(Point.X, AABB.Max.X));
