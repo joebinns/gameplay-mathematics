@@ -17,7 +17,7 @@ AProjectileActor::AProjectileActor()
 	// Use a sphere as a simple collision representation
 	Mesh->SetSimulatePhysics(true);
 	Mesh->SetWorldScale3D(FVector::One() * 0.05f);
-	Mesh->BodyInstance.SetCollisionProfileName("IgnoreOnlyPawn");
+	Mesh->BodyInstance.SetCollisionProfileName("BlockAllDynamic");
 	Mesh->SetWalkableSlopeOverride(FWalkableSlopeOverride(WalkableSlope_Unwalkable, 0.f));
 	Mesh->CanCharacterStepUpOn = ECB_No;
 	
