@@ -65,9 +65,9 @@ bool ADetectorActor::IsCollidingWithAnyProjectile()
 	{
 		// Create sphere representation of projectile
 		const auto ProjectileSphereComponent = Projectile->GetSphere();
-		const auto ProjectileSphere = new FSphere(ProjectileSphereComponent->GetComponentLocation(), ProjectileSphereComponent->GetScaledSphereRadius());
+		const auto ProjectileSphere = FSphere(ProjectileSphereComponent->GetComponentLocation(), ProjectileSphereComponent->GetScaledSphereRadius());
 
-		if (IsCollisionBetweenSphereAndAABB(ProjectileSphere, AABB))
+		if (IsCollisionBetweenSphereAndAABB(ProjectileSphere, CollisionAABB))
 		{
 			return true;
 		}
@@ -75,9 +75,9 @@ bool ADetectorActor::IsCollidingWithAnyProjectile()
 	return false;
 }
 
-bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere* Sphere, const FBox3d AABB)
+bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox3d AABB)
 {
-	const auto ClosestPointInAABB = GetClosestPointInAABB(Sphere->Center, AABB);
+	const auto ClosestPointInAABB = GetClosestPointInAABB(Sphere.Center, AABB);
 	return IsPointInSphere(ClosestPointInAABB, Sphere);
 }
 
@@ -90,10 +90,10 @@ FVector ADetectorActor::GetClosestPointInAABB(const FVector Point, const FBox3d 
 	return ClosestPointInAABB;
 }
 
-bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere* Sphere)
+bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere Sphere)
 {
-	const auto DistanceBetweenPointAndCenterOfSphere = FVector::Distance(Point, Sphere->Center);
-	return DistanceBetweenPointAndCenterOfSphere < Sphere->W;
+	const auto DistanceBetweenPointAndCenterOfSphere = FVector::Distance(Point, Sphere.Center);
+	return DistanceBetweenPointAndCenterOfSphere < Sphere.W;
 }
 
 void ADetectorActor::UpdateShutdownTimer(float DeltaTime)
