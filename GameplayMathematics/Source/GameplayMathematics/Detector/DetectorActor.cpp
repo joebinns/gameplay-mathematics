@@ -50,6 +50,8 @@ void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	CheckForProjectileCollision();
+	
 	if (ShutdownTimer > 0.f)
 	{
 		UpdateShutdownTimer(DeltaTime);
@@ -59,6 +61,14 @@ void ADetectorActor::Tick(float DeltaTime)
 		SpotLight->SetVisibility(true);
 		UpdateDetectionTimer(DeltaTime);
 		UpdateColor();
+	}
+}
+
+void ADetectorActor::CheckForProjectileCollision()
+{
+	for (auto Projectile : AProjectileActor::Projectiles)
+	{
+		// TODO: Check if the projectile (sphere) is colliding with the detector actor (AABB)
 	}
 }
 

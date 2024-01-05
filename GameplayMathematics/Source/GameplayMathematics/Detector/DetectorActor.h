@@ -48,6 +48,9 @@ protected:
 	void OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
 
 	UFUNCTION()
+	void CheckForProjectileCollision();
+	
+	UFUNCTION()
 	void Shutdown();
 
 	UFUNCTION()
