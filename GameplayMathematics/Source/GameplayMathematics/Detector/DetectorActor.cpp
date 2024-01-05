@@ -3,7 +3,7 @@
 #include "DetectorActor.h"
 
 #include "Components/SpotLightComponent.h"
-#include "../Projectile/GameplayMathematicsProjectile.h"
+#include "../Projectile/ProjectileActor.h"
 
 ADetectorActor::ADetectorActor()
 {
@@ -31,7 +31,7 @@ void ADetectorActor::BeginPlay()
 
 void ADetectorActor::OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
 {
-	const AGameplayMathematicsProjectile* GameplayMathematicsProjectile = Cast<AGameplayMathematicsProjectile>(OtherActor);
+	const AProjectileActor* GameplayMathematicsProjectile = Cast<AProjectileActor>(OtherActor);
 	if (GameplayMathematicsProjectile != nullptr)
 	{
 		Shutdown();

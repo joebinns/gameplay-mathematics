@@ -16,7 +16,7 @@ class GAMEPLAYMATHEMATICS_API UTP_WeaponComponent : public USkeletalMeshComponen
 public:
 	/** Projectile class to spawn */
 	UPROPERTY(EditDefaultsOnly, Category=Projectile)
-	TSubclassOf<class AGameplayMathematicsProjectile> ProjectileClass;
+	TSubclassOf<class AProjectileActor> ProjectileClass;
 
 	/** Sound to play each time we fire */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category=Gameplay)
