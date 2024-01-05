@@ -44,6 +44,7 @@ void ADetectorActor::Tick(float DeltaTime)
 
 	if (IsCollidingWithAnyProjectile())
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Is Colliding"));
 		Shutdown();
 	}
 	
@@ -61,6 +62,8 @@ void ADetectorActor::Tick(float DeltaTime)
 
 bool ADetectorActor::IsCollidingWithAnyProjectile()
 {
+	UE_LOG(LogTemp, Warning, TEXT("Num Projectiles: %d"), AProjectileActor::Projectiles.Num());
+	
 	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
 		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
