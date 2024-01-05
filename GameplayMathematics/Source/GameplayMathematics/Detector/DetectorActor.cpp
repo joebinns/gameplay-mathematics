@@ -13,6 +13,9 @@ ADetectorActor::ADetectorActor()
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	SpotLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
 
+	// Disable collision
+	Mesh->BodyInstance.SetCollisionProfileName("NoCollision");
+	
 	// Declare hierarchy
 	RootComponent = Mesh;
 	SpotLight->SetupAttachment(Mesh);
