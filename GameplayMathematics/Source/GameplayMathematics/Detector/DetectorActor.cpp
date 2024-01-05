@@ -3,7 +3,7 @@
 #include "DetectorActor.h"
 
 #include "Components/SpotLightComponent.h"
-#include "GameplayMathematicsProjectile.h"
+#include "../Projectile/GameplayMathematicsProjectile.h"
 
 ADetectorActor::ADetectorActor()
 {

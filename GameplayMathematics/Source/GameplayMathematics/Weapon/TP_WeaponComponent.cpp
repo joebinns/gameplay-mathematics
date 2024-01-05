@@ -2,8 +2,8 @@
 
 
 #include "TP_WeaponComponent.h"
-#include "GameplayMathematicsCharacter.h"
-#include "GameplayMathematicsProjectile.h"
+#include "../Character/GameplayMathematicsCharacter.h"
+#include "../Projectile/GameplayMathematicsProjectile.h"
 #include "GameFramework/PlayerController.h"
 #include "Camera/PlayerCameraManager.h"
 #include "Kismet/GameplayStatics.h"

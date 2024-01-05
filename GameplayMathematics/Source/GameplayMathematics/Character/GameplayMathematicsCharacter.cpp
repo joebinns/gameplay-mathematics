@@ -2,8 +2,8 @@
 
 #include "GameplayMathematicsCharacter.h"
 
-#include "DetectorActor.h"
-#include "GameplayMathematicsProjectile.h"
+#include "../Detector/DetectorActor.h"
+#include "../Projectile/GameplayMathematicsProjectile.h"
 #include "Animation/AnimInstance.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"

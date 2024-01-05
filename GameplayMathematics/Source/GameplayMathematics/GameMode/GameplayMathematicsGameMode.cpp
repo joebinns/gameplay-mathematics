@@ -1,7 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "GameplayMathematicsGameMode.h"
-#include "GameplayMathematicsCharacter.h"
+#include "../Character/GameplayMathematicsCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 AGameplayMathematicsGameMode::AGameplayMathematicsGameMode()
