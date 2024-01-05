@@ -68,6 +68,9 @@ protected:
 	UFUNCTION()
 	void UpdateColor();
 
+	UFUNCTION()
+	bool GetIsShutdown();
+
 private:
 	UPROPERTY()
 	APawn* Player;

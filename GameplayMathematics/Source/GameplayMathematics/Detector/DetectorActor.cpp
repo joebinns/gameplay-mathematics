@@ -45,17 +45,17 @@ void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (ShutdownTimer > 0.f)
+	if (IsCollidingWithAnyProjectile() && !GetIsShutdown())
+	{
+		Shutdown();
+	}
+	
+	if (GetIsShutdown())
 	{
 		UpdateShutdownTimer(DeltaTime);
 	}
 	else
 	{
-		if (IsCollidingWithAnyProjectile())
-		{
-			Shutdown();
-		}
-		
 		SpotLight->SetVisibility(true);
 		UpdateDetectionTimer(DeltaTime);
 		UpdateColor();
@@ -132,4 +132,9 @@ void ADetectorActor::UpdateColor()
 	const float T = TimeInCone / SpottedTriggerTime;
 	const FLinearColor Color = TimeInCone == 0.f ? NeutralColor : FLinearColor::LerpUsingHSV(WarningColor, SpottedColor, T);
 	SpotLight->SetLightColor(Color);
+}
+
+bool ADetectorActor::GetIsShutdown()
+{
+	return ShutdownTimer > 0.f;
 }
