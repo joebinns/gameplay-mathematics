@@ -45,10 +45,16 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION()
-	void OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit);
+	bool IsCollidingWithAnyProjectile();
+	
+	UFUNCTION()
+	bool IsCollisionBetweenSphereAndAABB(const FSphere* Sphere, const FBox3d AABB);
 
 	UFUNCTION()
-	void CheckForProjectileCollision();
+	FVector GetClosestPointInAABB(const FVector Point, const FBox3d AABB);
+
+	UFUNCTION()
+	bool IsPointInSphere(const FVector Point, const FSphere* Sphere);
 	
 	UFUNCTION()
 	void Shutdown();
@@ -65,6 +71,8 @@ protected:
 private:
 	UPROPERTY()
 	APawn* Player;
+	
+	FBox3d AABB;
 	
 	float TimeInCone = 0.f;
 

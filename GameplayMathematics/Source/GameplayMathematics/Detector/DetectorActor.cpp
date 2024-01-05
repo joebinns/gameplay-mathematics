@@ -4,6 +4,7 @@
 
 #include "Components/SpotLightComponent.h"
 #include "../Projectile/ProjectileActor.h"
+#include "Components/SphereComponent.h"
 
 ADetectorActor::ADetectorActor()
 {
@@ -27,18 +28,6 @@ void ADetectorActor::BeginPlay()
 
 	// Initialise the player reference
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
-
-	// Bind to on actor hit
-	OnActorHit.AddDynamic(this, &ADetectorActor::OnDetectorActorHit);
-}
-
-void ADetectorActor::OnDetectorActorHit(AActor* SelfActor, AActor* OtherActor, FVector NormalImpulse, const FHitResult& Hit)
-{
-	const AProjectileActor* GameplayMathematicsProjectile = Cast<AProjectileActor>(OtherActor);
-	if (GameplayMathematicsProjectile != nullptr)
-	{
-		Shutdown();
-	}
 }
 
 void ADetectorActor::Shutdown()
@@ -53,7 +42,10 @@ void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckForProjectileCollision();
+	if (IsCollidingWithAnyProjectile())
+	{
+		Shutdown();
+	}
 	
 	if (ShutdownTimer > 0.f)
 	{
@@ -67,12 +59,41 @@ void ADetectorActor::Tick(float DeltaTime)
 	}
 }
 
-void ADetectorActor::CheckForProjectileCollision()
+bool ADetectorActor::IsCollidingWithAnyProjectile()
 {
-	for (auto Projectile : AProjectileActor::Projectiles)
+	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
-		// TODO: Check if the projectile (sphere) is colliding with the detector actor (AABB)
+		// Create sphere representation of projectile
+		const auto ProjectileSphereComponent = Projectile->GetSphere();
+		const auto ProjectileSphere = new FSphere(ProjectileSphereComponent->GetComponentLocation(), ProjectileSphereComponent->GetScaledSphereRadius());
+
+		if (IsCollisionBetweenSphereAndAABB(ProjectileSphere, AABB))
+		{
+			return true;
+		}
 	}
+	return false;
+}
+
+bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere* Sphere, const FBox3d AABB)
+{
+	const auto ClosestPointInAABB = GetClosestPointInAABB(Sphere->Center, AABB);
+	return IsPointInSphere(ClosestPointInAABB, Sphere);
+}
+
+FVector ADetectorActor::GetClosestPointInAABB(const FVector Point, const FBox3d AABB)
+{
+	FVector ClosestPointInAABB;
+	ClosestPointInAABB.X = FMath::Max(AABB.Min.X, FMath::Min(Point.X, AABB.Max.X));
+	ClosestPointInAABB.Y = FMath::Max(AABB.Min.Y, FMath::Min(Point.Y, AABB.Max.Y));
+	ClosestPointInAABB.Z = FMath::Max(AABB.Min.Z, FMath::Min(Point.Z, AABB.Max.Z));
+	return ClosestPointInAABB;
+}
+
+bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere* Sphere)
+{
+	const auto DistanceBetweenPointAndCenterOfSphere = FVector::Distance(Point, Sphere->Center);
+	return DistanceBetweenPointAndCenterOfSphere < Sphere->W;
 }
 
 void ADetectorActor::UpdateShutdownTimer(float DeltaTime)
