@@ -25,7 +25,9 @@ class AProjectileActor : public AActor
 public:
 	AProjectileActor();
 
-	/** called when projectile hits something */
+	static TArray<AProjectileActor*> Projectiles;
+
+	/** Called when projectile hits something */
 	UFUNCTION()
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
@@ -33,5 +35,9 @@ public:
 	USphereComponent* GetCollisionComp() const { return CollisionComp; }
 	/** Returns ProjectileMovement subobject **/
 	UProjectileMovementComponent* GetProjectileMovement() const { return ProjectileMovement; }
+
+protected:
+	virtual void BeginPlay();
+	virtual void Destroyed();
 };
 

@@ -4,6 +4,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 
+TArray<AProjectileActor*> AProjectileActor::Projectiles;
+
 AProjectileActor::AProjectileActor() 
 {
 	// Use a sphere as a simple collision representation
@@ -29,6 +31,16 @@ AProjectileActor::AProjectileActor()
 
 	// Die after 3 seconds by default
 	InitialLifeSpan = 3.0f;
+}
+
+void AProjectileActor::BeginPlay()
+{
+	Projectiles.AddUnique(this);
+}
+
+void AProjectileActor::Destroyed()
+{
+	Projectiles.Remove(this);
 }
 
 void AProjectileActor::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
