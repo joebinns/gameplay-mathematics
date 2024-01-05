@@ -37,16 +37,19 @@ AProjectileActor::AProjectileActor()
 
 void AProjectileActor::BeginPlay()
 {
+	Super::BeginPlay();
 	Projectiles.AddUnique(this);
 }
 
-void AProjectileActor::Tick()
+void AProjectileActor::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
 	Sphere.Center = Mesh->GetComponentLocation();
 	Sphere.W = Mesh->GetComponentScale().X * 50.f;
 }
 
 void AProjectileActor::Destroyed()
 {
+	Super::Destroyed();
 	Projectiles.Remove(this);
 }
