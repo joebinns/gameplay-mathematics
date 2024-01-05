@@ -30,12 +30,7 @@ void ADetectorActor::BeginPlay()
 	Player = GetWorld()->GetFirstPlayerController()->GetPawn();
 
 	// Initialise collision AABB
-	const auto Center = Mesh->GetComponentLocation();
-	const FVector Extent = Mesh->Bounds.BoxExtent;
-	CollisionAABB = FBox::BuildAABB(Center, Extent);
-
-	// Debug
-	DrawDebugBox(GetWorld(), Center, Extent, FColor::Green);
+	CollisionAABB = FBox::BuildAABB(Mesh->GetComponentLocation(), Mesh->Bounds.BoxExtent);
 }
 
 void ADetectorActor::Shutdown()
@@ -49,12 +44,6 @@ void ADetectorActor::Shutdown()
 void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (IsCollidingWithAnyProjectile())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Is Colliding"));
-		Shutdown();
-	}
 	
 	if (ShutdownTimer > 0.f)
 	{
@@ -62,10 +51,18 @@ void ADetectorActor::Tick(float DeltaTime)
 	}
 	else
 	{
+		if (IsCollidingWithAnyProjectile())
+		{
+			Shutdown();
+		}
+		
 		SpotLight->SetVisibility(true);
 		UpdateDetectionTimer(DeltaTime);
 		UpdateColor();
 	}
+
+	// Debug
+	DrawDebugBox(GetWorld(), CollisionAABB.GetCenter(), CollisionAABB.GetExtent(), FColor::Green, false, 0.1f, 0, 1.f);
 }
 
 bool ADetectorActor::IsCollidingWithAnyProjectile()
