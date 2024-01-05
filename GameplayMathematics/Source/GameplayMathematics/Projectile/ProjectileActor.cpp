@@ -19,7 +19,7 @@ AProjectileActor::AProjectileActor()
 	Sphere.W = 1.0f;
 	
 	// Use a sphere as a simple collision representation
-	Mesh->SetWorldScale3D(FVector::One() * 25.0f);
+	Mesh->SetWorldScale3D(FVector::One() * 0.05f);
 	Mesh->BodyInstance.SetCollisionProfileName("Projectile");
 	
 	// Set root component
