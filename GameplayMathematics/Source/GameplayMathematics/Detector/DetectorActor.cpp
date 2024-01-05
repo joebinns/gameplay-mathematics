@@ -65,8 +65,9 @@ bool ADetectorActor::IsCollidingWithAnyProjectile()
 	{
 		// Create sphere representation of projectile
 		const auto ProjectileSphereComponent = Projectile->GetSphere();
+		if (ProjectileSphereComponent == nullptr) continue;
+		
 		const auto ProjectileSphere = FSphere(ProjectileSphereComponent->GetComponentLocation(), ProjectileSphereComponent->GetScaledSphereRadius());
-
 		if (IsCollisionBetweenSphereAndAABB(ProjectileSphere, CollisionAABB))
 		{
 			return true;
