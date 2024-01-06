@@ -55,6 +55,9 @@ protected:
 	FVector GetClosestPointInAABB(const FVector Point, const FBox AABB);
 
 	UFUNCTION()
+	FVector GetClosestPointOnAABB(const FVector Point, const FBox AABB);
+
+	UFUNCTION()
 	bool IsPointInSphere(const FVector Point, const FSphere Sphere);
 	
 	UFUNCTION()
@@ -76,6 +79,7 @@ private:
 	UPROPERTY()
 	APawn* Player;
 
+	TMap<AProjectileActor*, FVector> FrozenProjectileToVelocity;
 	TArray<AProjectileActor*> CollidingProjectiles;
 	TArray<AProjectileActor*> PreviouslyCollidingProjectiles;
 	
