@@ -45,7 +45,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION()
-	bool IsCollidingWithAnyProjectile();
+	void CheckCollisionWithProjectiles();
 	
 	UFUNCTION()
 	bool IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB);
@@ -74,9 +74,13 @@ protected:
 private:
 	UPROPERTY()
 	APawn* Player;
+
+	TArray<AProjectileActor*> PreviouslyCollidingProjectiles;
 	
 	FBox CollisionAABB;
 	
 	float TimeInCone = 0.f;
+
+	bool IsCollidingWithProjectiles = false;
 
 };

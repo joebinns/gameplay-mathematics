@@ -44,11 +44,11 @@ void ADetectorActor::Shutdown()
 void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	CheckCollisionWithProjectiles();
 	
-	if (IsCollidingWithAnyProjectile())
+	if (IsCollidingWithProjectiles)
 	{
-		
-	
 		if (!GetIsShutdown())
 		{
 			Shutdown();
@@ -70,16 +70,20 @@ void ADetectorActor::Tick(float DeltaTime)
 	DrawDebugBox(GetWorld(), CollisionAABB.GetCenter(), CollisionAABB.GetExtent(), FColor::Green, false, 0.1f, 0, 1.f);
 }
 
-bool ADetectorActor::IsCollidingWithAnyProjectile()
+void ADetectorActor::CheckCollisionWithProjectiles()
 {
+	PreviouslyCollidingProjectiles.Empty();
+	IsCollidingWithProjectiles = false;
 	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
+		if (PreviouslyCollidingProjectiles.Contains(Projectile)) continue;
+		
 		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
 		{
-			return true;
+			PreviouslyCollidingProjectiles.Add(Projectile);
+			IsCollidingWithProjectiles = true;
 		}
 	}
-	return false;
 }
 
 bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB)
