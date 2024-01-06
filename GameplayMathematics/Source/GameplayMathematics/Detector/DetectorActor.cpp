@@ -58,8 +58,6 @@ void ADetectorActor::Tick(float DeltaTime)
 	for (const auto Projectile : CollidingProjectiles)
 	{
 		const auto ProjectileMesh = Projectile->GetMesh();
-		const auto ClosestPointOnAABB = GetClosestPointOnAABB(ProjectileMesh->GetComponentLocation(), CollisionAABB);
-		ProjectileMesh->SetWorldLocation(ClosestPointOnAABB);
 		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
 		ProjectileMesh->SetEnableGravity(false);
@@ -112,20 +110,6 @@ FVector ADetectorActor::GetClosestPointInAABB(const FVector Point, const FBox AA
 	ClosestPointInAABB.Y = FMath::Max(AABB.Min.Y, FMath::Min(Point.Y, AABB.Max.Y));
 	ClosestPointInAABB.Z = FMath::Max(AABB.Min.Z, FMath::Min(Point.Z, AABB.Max.Z));
 	return ClosestPointInAABB;
-}
-
-FVector ADetectorActor::GetClosestPointOnAABB(const FVector Point, const FBox AABB)
-{
-	FVector ClosestPointOnAABB;
-	const auto AABBCenter = AABB.GetCenter();
-	const auto AABBExtent = AABB.GetExtent();
-	const auto SignX = FMath::Sign(Point.X - AABBCenter.X);
-	const auto SignY = FMath::Sign(Point.Y - AABBCenter.Y);
-	const auto SignZ = FMath::Sign(Point.Z - AABBCenter.Z);
-	ClosestPointOnAABB.X = SignX * AABB.Max.X + AABBExtent.X;
-	ClosestPointOnAABB.Y = SignY * AABB.Max.Y + AABBExtent.Y;
-	ClosestPointOnAABB.Z = SignZ * AABB.Max.Z + AABBExtent.Z;
-	return ClosestPointOnAABB;
 }
 
 bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere Sphere)

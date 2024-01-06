@@ -55,9 +55,6 @@ protected:
 	FVector GetClosestPointInAABB(const FVector Point, const FBox AABB);
 
 	UFUNCTION()
-	FVector GetClosestPointOnAABB(const FVector Point, const FBox AABB);
-
-	UFUNCTION()
 	bool IsPointInSphere(const FVector Point, const FSphere Sphere);
 	
 	UFUNCTION()
