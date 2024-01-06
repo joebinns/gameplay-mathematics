@@ -1,6 +1,8 @@
 # Gameplay Mathematics
 An assignment made for Futuregames course "3D Mathematics".
 
+<img alt="Gameplay gif" width="965" src="https://github.com/joebinns/gameplay-mathematics/blob/main/collision-new.gif"/>
+
 ## Controls
 ### Movement
 Use <kbd>W</kbd>, <kbd>A</kbd>, <kbd>S</kbd> and <kbd>D</kbd> to move.<br>
