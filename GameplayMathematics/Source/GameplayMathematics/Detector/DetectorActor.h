@@ -6,6 +6,7 @@
 #include "DetectorActor.generated.h"
 
 class USpotLightComponent;
+class AProjectileActor;
 
 UCLASS()
 class GAMEPLAYMATHEMATICS_API ADetectorActor : public AActor
@@ -75,6 +76,7 @@ private:
 	UPROPERTY()
 	APawn* Player;
 
+	TArray<AProjectileActor*> CollidingProjectiles;
 	TArray<AProjectileActor*> PreviouslyCollidingProjectiles;
 	
 	FBox CollisionAABB;

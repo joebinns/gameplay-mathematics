@@ -72,7 +72,7 @@ void ADetectorActor::Tick(float DeltaTime)
 
 void ADetectorActor::CheckCollisionWithProjectiles()
 {
-	PreviouslyCollidingProjectiles.Empty();
+	CollidingProjectiles.Empty();
 	IsCollidingWithProjectiles = false;
 	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
@@ -80,10 +80,12 @@ void ADetectorActor::CheckCollisionWithProjectiles()
 		
 		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
 		{
-			PreviouslyCollidingProjectiles.Add(Projectile);
+			CollidingProjectiles.Add(Projectile);
 			IsCollidingWithProjectiles = true;
 		}
 	}
+	PreviouslyCollidingProjectiles.Empty();
+	PreviouslyCollidingProjectiles = CollidingProjectiles;
 }
 
 bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB)
