@@ -60,7 +60,7 @@ bool AGameplayMathematicsCharacter::IsLookingAtEnemy()
 ```
 
 ### [Intersection](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection-revised) (new)
-I created a custom intersection check to determine if projectiles from the gun where hitting the detector actor.
+I replaced Unreal's collision system with a custom intersection check to determine if projectiles from the gun where hitting the detector actor.
 Projectiles were represented as spheres and the detector actor was approximated to be an AABB.
 
 ``` cpp
@@ -109,7 +109,7 @@ bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere Sphere)
 }
 ```
 
-### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection)
+### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/collision) (old)
 Hit events on the detector actor with projectiles were used to disable the detector's spot light and to set a shutdown timer on the detector.
 Until the shutdown timer has passed, the detector is disabled.
 
@@ -146,6 +146,34 @@ void ADetectorActor::Tick(float DeltaTime)
     UpdateShutdownTimer(DeltaTime);
   }
   ...
+}
+```
+
+### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/collision-revised) (new)
+I implemented custom collision logic by freezing projectiles upon intersection, recording their existing velocity and then re-applying that velocity in reverse and re-enabling physics when the detector actor exits shutdown mode -- such as to 'shoot' at the player.
+
+``` cpp
+void ADetectorActor::FreezeProjectiles()
+{
+	for (auto* Projectile : NewlyCollidingProjectiles)
+	{
+		auto* ProjectileMesh = Projectile->GetMesh();
+		FrozenProjectileToVelocity.Add(Projectile, ProjectileMesh->GetPhysicsLinearVelocity());
+		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
+		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
+		ProjectileMesh->SetEnableGravity(false);
+	}
+}
+
+void ADetectorActor::UnFreezeProjectiles()
+{
+	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
+	{
+		const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
+		ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
+		ProjectileMesh->SetEnableGravity(true);
+	}
+	FrozenProjectileToVelocity.Empty();
 }
 ```
 
