@@ -83,14 +83,14 @@ private:
 	APawn* Player;
 
 	TMap<AProjectileActor*, FVector> FrozenProjectileToVelocity;
-	TArray<AProjectileActor*> NewlyCollidingProjectiles;
-	TArray<AProjectileActor*> CollidingProjectiles;
-	TArray<AProjectileActor*> PreviouslyCollidingProjectiles;
+	TArray<AProjectileActor*> NewlyIntersectingProjectiles;
+	TArray<AProjectileActor*> IntersectingProjectiles;
+	TArray<AProjectileActor*> PreviouslyIntersectingProjectiles;
 	
 	FBox CollisionAABB;
 	
 	float TimeInCone = 0.f;
 
-	bool IsNewlyCollidingWithProjectiles = false;
+	bool IsNewlyIntersectingWithProjectiles = false;
 
 };
