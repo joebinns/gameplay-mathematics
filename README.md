@@ -150,6 +150,7 @@ void ADetectorActor::Tick(float DeltaTime)
 ```
 
 ### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/collision-revised) (new)
+With collisions disabled on the detector actor, I set out to work on creating custom collision behaviour between the detector actor and projectiles.
 I implemented custom collision logic by freezing projectiles upon intersection, recording their existing velocity and then re-applying that velocity in reverse and re-enabling physics when the detector actor exits shutdown mode -- such as to 'shoot' at the player.
 
 ``` cpp
