@@ -119,6 +119,7 @@ void ADetectorActor::UpdateShutdownTimer(float DeltaTime)
 	ShutdownTimer -= DeltaTime;
 	if (!GetIsShutdown())
 	{
+		UpdateColor();
 		SpotLight->SetVisibility(true);
 		UnFreezeProjectiles();
 	}
@@ -164,7 +165,6 @@ void ADetectorActor::FreezeProjectiles()
 		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
 		ProjectileMesh->SetEnableGravity(false);
-		//ProjectileMesh->SetCollisionProfileName("NoCollision");
 	}
 }
 
@@ -175,7 +175,6 @@ void ADetectorActor::UnFreezeProjectiles()
 		const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
 		ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
 		ProjectileMesh->SetEnableGravity(true);
-		//ProjectileMesh->SetCollisionProfileName("BlockAllDynamic");
 	}
 	FrozenProjectileToVelocity.Empty();
 }
