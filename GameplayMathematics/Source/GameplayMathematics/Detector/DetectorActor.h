@@ -77,6 +77,7 @@ private:
 	APawn* Player;
 
 	TMap<AProjectileActor*, FVector> FrozenProjectileToVelocity;
+	TArray<AProjectileActor*> NewlyCollidingProjectiles;
 	TArray<AProjectileActor*> CollidingProjectiles;
 	TArray<AProjectileActor*> PreviouslyCollidingProjectiles;
 	
@@ -84,6 +85,6 @@ private:
 	
 	float TimeInCone = 0.f;
 
-	bool IsCollidingWithProjectiles = false;
+	bool IsNewlyCollidingWithProjectiles = false;
 
 };

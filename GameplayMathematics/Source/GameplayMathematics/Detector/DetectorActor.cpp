@@ -47,7 +47,7 @@ void ADetectorActor::Tick(float DeltaTime)
 
 	CheckCollisionWithProjectiles();
 	
-	if (IsCollidingWithProjectiles)
+	if (IsNewlyCollidingWithProjectiles)
 	{
 		if (!GetIsShutdown())
 		{
@@ -55,7 +55,7 @@ void ADetectorActor::Tick(float DeltaTime)
 		}
 	}
 
-	for (auto* Projectile : CollidingProjectiles)
+	for (auto* Projectile : NewlyCollidingProjectiles)
 	{
 		auto* ProjectileMesh = Projectile->GetMesh();
 		FrozenProjectileToVelocity.Add(Projectile, ProjectileMesh->GetPhysicsLinearVelocity());
@@ -64,7 +64,7 @@ void ADetectorActor::Tick(float DeltaTime)
 		ProjectileMesh->SetEnableGravity(false);
 		//ProjectileMesh->SetCollisionProfileName("NoCollision");
 	}
-	
+
 	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
     {
     	const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
@@ -91,19 +91,23 @@ void ADetectorActor::Tick(float DeltaTime)
 
 void ADetectorActor::CheckCollisionWithProjectiles()
 {
+	NewlyCollidingProjectiles.Empty();
 	CollidingProjectiles.Empty();
-	IsCollidingWithProjectiles = false;
+	IsNewlyCollidingWithProjectiles = false;
 	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
-		if (PreviouslyCollidingProjectiles.Contains(Projectile)) continue;
-		
 		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
 		{
-			CollidingProjectiles.Add(Projectile);
-			IsCollidingWithProjectiles = true;
+			if (PreviouslyCollidingProjectiles.Contains(Projectile))
+			{
+				CollidingProjectiles.Add(Projectile);
+				continue;
+			}
+			
+			NewlyCollidingProjectiles.Add(Projectile);
+			IsNewlyCollidingWithProjectiles = true;
 		}
 	}
-	PreviouslyCollidingProjectiles.Empty();
 	PreviouslyCollidingProjectiles = CollidingProjectiles;
 }
 
