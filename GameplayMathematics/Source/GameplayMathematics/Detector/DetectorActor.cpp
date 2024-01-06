@@ -58,11 +58,21 @@ void ADetectorActor::Tick(float DeltaTime)
 	for (const auto Projectile : CollidingProjectiles)
 	{
 		const auto ProjectileMesh = Projectile->GetMesh();
+		FrozenProjectileToVelocity[Projectile] = ProjectileMesh->GetPhysicsLinearVelocity();
 		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
 		ProjectileMesh->SetEnableGravity(false);
 		ProjectileMesh->SetCollisionProfileName("NoCollision");
 	}
+	
+	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
+    {
+    	const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
+    	ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
+    	ProjectileMesh->SetEnableGravity(true);
+    	ProjectileMesh->SetCollisionProfileName("BlockAllDynamic");
+    }
+	FrozenProjectileToVelocity.Empty();
 	
 	if (GetIsShutdown())
 	{
