@@ -55,10 +55,13 @@ void ADetectorActor::Tick(float DeltaTime)
 		}
 	}
 
-	for (auto Projectile : CollidingProjectiles)
+	for (const auto Projectile : CollidingProjectiles)
 	{
-		Projectile->GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
-		Projectile->GetMesh()->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
+		const auto ProjectileMesh = Projectile->GetMesh();
+		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
+		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
+		ProjectileMesh->SetEnableGravity(false);
+		//ProjectileMesh->SetCollisionProfileName("NoCollision");
 	}
 	
 	if (GetIsShutdown())
