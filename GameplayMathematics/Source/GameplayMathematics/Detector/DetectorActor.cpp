@@ -45,7 +45,8 @@ void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	CheckCollisionWithProjectiles();
+	// TODO: Check intersections in fixed tick
+	CheckIntersectionWithProjectiles();
 	FreezeProjectiles();
 	
 	if (IsNewlyCollidingWithProjectiles)
@@ -70,7 +71,7 @@ void ADetectorActor::Tick(float DeltaTime)
 	DrawDebugBox(GetWorld(), CollisionAABB.GetCenter(), CollisionAABB.GetExtent(), FColor::Green, false, 0.1f, 0, 1.f);
 }
 
-void ADetectorActor::CheckCollisionWithProjectiles()
+void ADetectorActor::CheckIntersectionWithProjectiles()
 {
 	NewlyCollidingProjectiles.Empty();
 	CollidingProjectiles.Empty();

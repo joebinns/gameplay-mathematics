@@ -46,7 +46,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION()
-	void CheckCollisionWithProjectiles();
+	void CheckIntersectionWithProjectiles();
 	
 	UFUNCTION()
 	bool IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB);
