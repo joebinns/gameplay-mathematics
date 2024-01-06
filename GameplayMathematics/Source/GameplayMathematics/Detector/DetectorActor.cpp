@@ -47,6 +47,9 @@ void ADetectorActor::Tick(float DeltaTime)
 
 	CheckCollisionWithProjectiles();
 	
+	FreezeProjectiles();
+    UnFreezeProjectiles();
+	
 	if (IsNewlyCollidingWithProjectiles)
 	{
 		if (!GetIsShutdown())
@@ -54,25 +57,6 @@ void ADetectorActor::Tick(float DeltaTime)
 			Shutdown();
 		}
 	}
-
-	for (auto* Projectile : NewlyCollidingProjectiles)
-	{
-		auto* ProjectileMesh = Projectile->GetMesh();
-		FrozenProjectileToVelocity.Add(Projectile, ProjectileMesh->GetPhysicsLinearVelocity());
-		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
-		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
-		ProjectileMesh->SetEnableGravity(false);
-		//ProjectileMesh->SetCollisionProfileName("NoCollision");
-	}
-
-	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
-    {
-    	const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
-    	ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
-    	ProjectileMesh->SetEnableGravity(true);
-    	//ProjectileMesh->SetCollisionProfileName("BlockAllDynamic");
-    }
-	FrozenProjectileToVelocity.Empty();
 	
 	if (GetIsShutdown())
 	{
@@ -167,4 +151,29 @@ void ADetectorActor::UpdateColor()
 bool ADetectorActor::GetIsShutdown()
 {
 	return ShutdownTimer > 0.f;
+}
+
+void ADetectorActor::FreezeProjectiles()
+{
+	for (auto* Projectile : NewlyCollidingProjectiles)
+	{
+		auto* ProjectileMesh = Projectile->GetMesh();
+		FrozenProjectileToVelocity.Add(Projectile, ProjectileMesh->GetPhysicsLinearVelocity());
+		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
+		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
+		ProjectileMesh->SetEnableGravity(false);
+		//ProjectileMesh->SetCollisionProfileName("NoCollision");
+	}
+}
+
+void ADetectorActor::UnFreezeProjectiles()
+{
+	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
+	{
+		const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
+		ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
+		ProjectileMesh->SetEnableGravity(true);
+		//ProjectileMesh->SetCollisionProfileName("BlockAllDynamic");
+	}
+	FrozenProjectileToVelocity.Empty();
 }

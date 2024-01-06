@@ -72,6 +72,12 @@ protected:
 	UFUNCTION()
 	bool GetIsShutdown();
 
+	UFUNCTION()
+	void FreezeProjectiles();
+
+	UFUNCTION()
+	void UnFreezeProjectiles();
+
 private:
 	UPROPERTY()
 	APawn* Player;
