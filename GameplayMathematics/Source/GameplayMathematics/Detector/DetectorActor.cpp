@@ -55,14 +55,14 @@ void ADetectorActor::Tick(float DeltaTime)
 		}
 	}
 
-	for (const auto Projectile : CollidingProjectiles)
+	for (auto* Projectile : CollidingProjectiles)
 	{
-		const auto ProjectileMesh = Projectile->GetMesh();
-		FrozenProjectileToVelocity[Projectile] = ProjectileMesh->GetPhysicsLinearVelocity();
+		auto* ProjectileMesh = Projectile->GetMesh();
+		FrozenProjectileToVelocity.Add(Projectile, ProjectileMesh->GetPhysicsLinearVelocity());
 		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
 		ProjectileMesh->SetEnableGravity(false);
-		ProjectileMesh->SetCollisionProfileName("NoCollision");
+		//ProjectileMesh->SetCollisionProfileName("NoCollision");
 	}
 	
 	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
@@ -70,7 +70,7 @@ void ADetectorActor::Tick(float DeltaTime)
     	const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
     	ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
     	ProjectileMesh->SetEnableGravity(true);
-    	ProjectileMesh->SetCollisionProfileName("BlockAllDynamic");
+    	//ProjectileMesh->SetCollisionProfileName("BlockAllDynamic");
     }
 	FrozenProjectileToVelocity.Empty();
 	
