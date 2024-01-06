@@ -46,9 +46,7 @@ void ADetectorActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	CheckCollisionWithProjectiles();
-	
 	FreezeProjectiles();
-    UnFreezeProjectiles();
 	
 	if (IsNewlyCollidingWithProjectiles)
 	{
@@ -64,7 +62,6 @@ void ADetectorActor::Tick(float DeltaTime)
 	}
 	else
 	{
-		SpotLight->SetVisibility(true);
 		UpdateDetectionTimer(DeltaTime);
 		UpdateColor();
 	}
@@ -120,6 +117,11 @@ bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere Sphere)
 void ADetectorActor::UpdateShutdownTimer(float DeltaTime)
 {
 	ShutdownTimer -= DeltaTime;
+	if (!GetIsShutdown())
+	{
+		SpotLight->SetVisibility(true);
+		UnFreezeProjectiles();
+	}
 }
 
 void ADetectorActor::UpdateDetectionTimer(float DeltaTime)
