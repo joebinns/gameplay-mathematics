@@ -105,6 +105,7 @@ void ADetectorActor::CheckCollisionWithProjectiles()
 			}
 			
 			NewlyCollidingProjectiles.Add(Projectile);
+			CollidingProjectiles.Add(Projectile);
 			IsNewlyCollidingWithProjectiles = true;
 		}
 	}
