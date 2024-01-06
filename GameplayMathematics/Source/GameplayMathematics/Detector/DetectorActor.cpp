@@ -45,9 +45,14 @@ void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	
-	if (IsCollidingWithAnyProjectile() && !GetIsShutdown())
+	if (IsCollidingWithAnyProjectile())
 	{
-		Shutdown();
+		
+	
+		if (!GetIsShutdown())
+		{
+			Shutdown();
+		}
 	}
 	
 	if (GetIsShutdown())
@@ -67,15 +72,10 @@ void ADetectorActor::Tick(float DeltaTime)
 
 bool ADetectorActor::IsCollidingWithAnyProjectile()
 {
-	//UE_LOG(LogTemp, Warning, TEXT("Num Projectiles: %d"), AProjectileActor::Projectiles.Num());
-	
 	for (const auto Projectile : AProjectileActor::Projectiles)
 	{
 		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
 		{
-			//UE_LOG(LogTemp, Warning, TEXT("Projectile: %d"), AProjectileActor::Projectiles.Num());
-			//UE_LOG(LogTemp, Warning, TEXT("AABB: %"), CollisionAABB.Min.X);
-			
 			return true;
 		}
 	}
