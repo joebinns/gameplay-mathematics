@@ -31,7 +31,7 @@ const float T = TimeInCone / SpottedTriggerTime;
 const FLinearColor Color = TimeInCone == 0.f ? NeutralColor : FLinearColor::LerpUsingHSV(WarningColor, SpottedColor, T);
 ```
 
-### [Intersection](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection-v2)
+### [Intersection](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection-v2) (old)
 A crosshair was added to help guide the player's aim.
 A line trace was then used to determine if the player was looking at the detector actor.
 The crosshair image was then dynamically switched between based on if the player was aiming at the detector actor.
@@ -59,7 +59,57 @@ bool AGameplayMathematicsCharacter::IsLookingAtEnemy()
 }
 ```
 
-### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection)
+### [Intersection](https://github.com/joebinns/gameplay-mathematics/releases/tag/intersection-revised) (new)
+I replaced Unreal's collision system with a custom intersection check to determine if projectiles from the gun where hitting the detector actor.
+Projectiles were represented as spheres and the detector actor was approximated to be an AABB.
+
+``` cpp
+void ADetectorActor::CheckCollisionWithProjectiles()
+{
+	NewlyCollidingProjectiles.Empty();
+	CollidingProjectiles.Empty();
+	IsNewlyCollidingWithProjectiles = false;
+	for (const auto Projectile : AProjectileActor::Projectiles)
+	{
+		if (IsCollisionBetweenSphereAndAABB(Projectile->GetSphere(), CollisionAABB))
+		{
+			if (PreviouslyCollidingProjectiles.Contains(Projectile))
+			{
+				CollidingProjectiles.Add(Projectile);
+				continue;
+			}
+			
+			NewlyCollidingProjectiles.Add(Projectile);
+			CollidingProjectiles.Add(Projectile);
+			IsNewlyCollidingWithProjectiles = true;
+		}
+	}
+	PreviouslyCollidingProjectiles = CollidingProjectiles;
+}
+
+bool ADetectorActor::IsCollisionBetweenSphereAndAABB(const FSphere Sphere, const FBox AABB)
+{
+	const auto ClosestPointInAABB = GetClosestPointInAABB(Sphere.Center, AABB);
+	return IsPointInSphere(ClosestPointInAABB, Sphere);
+}
+
+FVector ADetectorActor::GetClosestPointInAABB(const FVector Point, const FBox AABB)
+{
+	FVector ClosestPointInAABB;
+	ClosestPointInAABB.X = FMath::Max(AABB.Min.X, FMath::Min(Point.X, AABB.Max.X));
+	ClosestPointInAABB.Y = FMath::Max(AABB.Min.Y, FMath::Min(Point.Y, AABB.Max.Y));
+	ClosestPointInAABB.Z = FMath::Max(AABB.Min.Z, FMath::Min(Point.Z, AABB.Max.Z));
+	return ClosestPointInAABB;
+}
+
+bool ADetectorActor::IsPointInSphere(const FVector Point, const FSphere Sphere)
+{
+	const auto DistanceBetweenPointAndCenterOfSphere = FVector::Distance(Point, Sphere.Center);
+	return DistanceBetweenPointAndCenterOfSphere < Sphere.W;
+}
+```
+
+### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/collision) (old)
 Hit events on the detector actor with projectiles were used to disable the detector's spot light and to set a shutdown timer on the detector.
 Until the shutdown timer has passed, the detector is disabled.
 
@@ -96,6 +146,35 @@ void ADetectorActor::Tick(float DeltaTime)
     UpdateShutdownTimer(DeltaTime);
   }
   ...
+}
+```
+
+### [Collision](https://github.com/joebinns/gameplay-mathematics/releases/tag/collision-revised) (new)
+With collisions disabled on the detector actor, I set out to work on creating custom collision behaviour between the detector actor and projectiles.
+I implemented custom collision logic by freezing projectiles upon intersection, recording their existing velocity and then re-applying that velocity in reverse and re-enabling physics when the detector actor exits shutdown mode -- such as to 'shoot' at the player.
+
+``` cpp
+void ADetectorActor::FreezeProjectiles()
+{
+	for (auto* Projectile : NewlyCollidingProjectiles)
+	{
+		auto* ProjectileMesh = Projectile->GetMesh();
+		FrozenProjectileToVelocity.Add(Projectile, ProjectileMesh->GetPhysicsLinearVelocity());
+		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
+		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
+		ProjectileMesh->SetEnableGravity(false);
+	}
+}
+
+void ADetectorActor::UnFreezeProjectiles()
+{
+	for (const auto FrozenProjectileAndVelocity : FrozenProjectileToVelocity)
+	{
+		const auto ProjectileMesh = FrozenProjectileAndVelocity.Key->GetMesh();
+		ProjectileMesh->SetPhysicsLinearVelocity(-FrozenProjectileAndVelocity.Value);
+		ProjectileMesh->SetEnableGravity(true);
+	}
+	FrozenProjectileToVelocity.Empty();
 }
 ```
 
