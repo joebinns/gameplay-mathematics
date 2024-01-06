@@ -31,8 +31,8 @@ AProjectileActor::AProjectileActor()
 	ProjectileMovement->bRotationFollowsVelocity = true;
 	ProjectileMovement->bShouldBounce = true;
 
-	// Die after 3 seconds by default
-	InitialLifeSpan = 3.0f;
+	// Die after 10 seconds by default
+	InitialLifeSpan = 10.0f;
 }
 
 void AProjectileActor::BeginPlay()
