@@ -20,6 +20,9 @@ public:
 	static TArray<AProjectileActor*> Projectiles;
 
 	UFUNCTION()
+	UStaticMeshComponent* GetMesh() const { return Mesh; }
+	
+	UFUNCTION()
 	FSphere GetSphere() const { return Sphere; }
 	
 	UFUNCTION(BlueprintCallable)
