@@ -44,9 +44,8 @@ void ADetectorActor::Shutdown()
 void ADetectorActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	// TODO: Check intersections in fixed tick
-	CheckIntersectionWithProjectiles();
+	
+	CheckIntersectionWithProjectiles(); // TODO: This should be checked in a sub-stepping tick
 	FreezeProjectiles();
 	
 	if (IsNewlyIntersectingWithProjectiles)
