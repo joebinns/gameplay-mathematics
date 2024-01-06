@@ -61,7 +61,7 @@ void ADetectorActor::Tick(float DeltaTime)
 		ProjectileMesh->SetPhysicsLinearVelocity(FVector::ZeroVector);
 		ProjectileMesh->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
 		ProjectileMesh->SetEnableGravity(false);
-		//ProjectileMesh->SetCollisionProfileName("NoCollision");
+		ProjectileMesh->SetCollisionProfileName("NoCollision");
 	}
 	
 	if (GetIsShutdown())
