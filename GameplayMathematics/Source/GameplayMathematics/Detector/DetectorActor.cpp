@@ -57,7 +57,6 @@ void ADetectorActor::Tick(float DeltaTime)
 
 	for (auto Projectile : CollidingProjectiles)
 	{
-		Projectile->DisableComponentsSimulatePhysics();
 		Projectile->GetMesh()->SetPhysicsLinearVelocity(FVector::ZeroVector);
 		Projectile->GetMesh()->SetPhysicsAngularVelocityInRadians(FVector::ZeroVector);
 	}
